@@ -1,1 +1,769 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aljabar — Siap Olimpiade Matematika SMP</title>
+<meta name="description" content="Media belajar interaktif BAB 1 Aljabar untuk persiapan OSN Matematika SMP: operasi aljabar, fungsi, persamaan &amp; pertidaksamaan linear, SPLDV, barisan &amp; deret, dan statistika.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js" defer></script>
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --ink:#16213E;
+  --ink-soft:#3A4A6B;
+  --paper:#EAF0F6;
+  --card:#FFFFFF;
+  --grid:#C7D6E5;
+  --gold:#E3A72C;
+  --gold-deep:#B9821A;
+  --emerald:#2F8F6E;
+  --brick:#C1483D;
+  --violet:#5B57C4;
+  --radius:14px;
+  --shadow:0 1px 2px rgba(22,33,62,.06), 0 8px 24px -12px rgba(22,33,62,.18);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:
+    linear-gradient(var(--grid) 1px, transparent 1px) 0 0/40px 40px,
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0/40px 40px,
+    var(--paper);
+  color:var(--ink);
+  font-family:'Inter',system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.display{ font-family:'Fraunces',serif; letter-spacing:-.01em; }
+.mono{ font-family:'JetBrains Mono',monospace; }
+a{color:inherit;}
+button{font-family:inherit;}
+:focus-visible{ outline:3px solid var(--gold); outline-offset:2px; }
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001ms !important; transition-duration:.001ms !important;}
+}
 
+/* ============ LAYOUT SHELL ============ */
+.app{ display:flex; min-height:100vh; }
+
+/* --- spine / sidebar nav --- */
+.spine{
+  width:272px; flex:0 0 272px;
+  background:var(--ink);
+  color:#EAF0F6;
+  position:sticky; top:0; height:100vh; overflow-y:auto;
+  padding:22px 16px 24px;
+  display:flex; flex-direction:column; gap:18px;
+}
+.spine-brand{ padding:4px 10px 14px; border-bottom:1px solid rgba(234,240,246,.14); }
+.spine-brand .eyebrow{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); }
+.spine-brand h1{ margin:6px 0 4px; font-size:26px; line-height:1.05; color:#fff; }
+.spine-brand p{ margin:0; font-size:12.5px; color:#B7C4DA; line-height:1.5; }
+
+.spine-progress{ padding:0 10px; }
+.spine-progress .label{ font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:#8FA0BE; margin-bottom:8px; font-family:'JetBrains Mono',monospace;}
+.dots{ display:flex; gap:6px; }
+.dot{
+  flex:1; height:6px; border-radius:4px; background:rgba(234,240,246,.16);
+  transition:background .25s;
+}
+.dot.attempted{ background:var(--gold); }
+.dot.done{ background:var(--emerald); }
+
+.spine-nav{ display:flex; flex-direction:column; gap:4px; }
+.spine-item{
+  all:unset; cursor:pointer;
+  display:flex; align-items:baseline; gap:10px;
+  padding:11px 10px; border-radius:10px;
+  color:#C7D3E6; font-size:14px; line-height:1.3;
+}
+.spine-item .num{ font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#7C8FB2; min-width:34px; }
+.spine-item:hover{ background:rgba(234,240,246,.06); color:#fff; }
+.spine-item.active{ background:rgba(227,167,44,.14); color:#fff; }
+.spine-item.active .num{ color:var(--gold); }
+
+.spine-foot{ margin-top:auto; padding:10px; font-size:11.5px; color:#7C8FB2; line-height:1.5; border-top:1px solid rgba(234,240,246,.14); }
+
+/* mobile spine toggle */
+.spine-toggle{ display:none; }
+
+/* --- main --- */
+main{ flex:1; min-width:0; padding:36px 40px 80px; max-width:980px; margin:0 auto; }
+
+.hero{
+  background:var(--ink); color:#fff; border-radius:20px;
+  padding:38px 34px; margin-bottom:34px; position:relative; overflow:hidden;
+  display:flex; gap:28px; align-items:center; flex-wrap:wrap;
+}
+.hero::before{
+  content:""; position:absolute; inset:0;
+  background:
+    repeating-linear-gradient(0deg, rgba(234,240,246,.05) 0 1px, transparent 1px 34px),
+    repeating-linear-gradient(90deg, rgba(234,240,246,.05) 0 1px, transparent 1px 34px);
+  pointer-events:none;
+}
+.hero-copy{ position:relative; flex:1 1 340px; }
+.hero-copy .eyebrow{ font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); }
+.hero-copy h1{ font-size:44px; margin:10px 0 12px; color:#fff; }
+.hero-copy p{ color:#C7D3E6; font-size:15px; line-height:1.6; max-width:46ch; margin:0 0 16px;}
+.hero-stat-row{ display:flex; gap:18px; flex-wrap:wrap; }
+.hero-stat{ font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#9FB0CE; }
+.hero-stat b{ display:block; font-size:19px; color:#fff; font-family:'Fraunces',serif; }
+.hero-demo{ position:relative; flex:0 0 220px; display:flex; flex-direction:column; align-items:center; gap:8px;}
+.hero-demo .cap{ font-size:11px; color:#8FA0BE; font-family:'JetBrains Mono',monospace; text-align:center;}
+
+/* ============ CONTENT PRIMITIVES ============ */
+.topic{ display:none; }
+.topic.active{ display:block; animation:fadeIn .35s ease; }
+@keyframes fadeIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;} }
+
+.topic-head{ margin-bottom:22px; }
+.tag{
+  display:inline-block; font-family:'JetBrains Mono',monospace; font-size:12px;
+  color:var(--gold-deep); background:rgba(227,167,44,.14);
+  padding:3px 10px; border-radius:20px; letter-spacing:.06em; margin-bottom:10px;
+}
+.topic-head h2{ font-size:32px; margin:0 0 8px; }
+.topic-head .lede{ color:var(--ink-soft); font-size:15.5px; line-height:1.6; max-width:64ch; margin:0; }
+
+.block-label{
+  font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-soft); margin:34px 0 12px;
+  display:flex; align-items:center; gap:10px;
+}
+.block-label::after{ content:""; flex:1; height:1px; background:var(--grid); }
+
+.theory-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; }
+.theory-card{
+  background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow);
+  padding:18px 18px 16px; border-left:4px solid var(--ink);
+}
+.theory-card h3{ margin:0 0 8px; font-size:16.5px; }
+.theory-card ul{ margin:0; padding-left:0; list-style:none; }
+.theory-card li{ font-size:13.5px; line-height:1.7; margin-bottom:6px; padding-left:20px; position:relative; }
+.theory-card li::before{ content:"⊕"; position:absolute; left:0; color:var(--gold-deep); font-size:12px; top:3px;}
+.theory-card p{ font-size:13.5px; line-height:1.7; color:var(--ink-soft); margin:0 0 8px; }
+.theory-card .formula{ background:var(--paper); border-radius:8px; padding:10px 12px; margin:8px 0; font-size:14px; overflow-x:auto; }
+
+.example-card{
+  background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow);
+  border-left:4px solid var(--gold); padding:20px 22px; margin-bottom:14px;
+}
+.example-card .ex-tag{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--gold-deep); text-transform:uppercase; letter-spacing:.08em;}
+.example-card h4{ margin:6px 0 10px; font-size:16px; }
+.example-card .steps{ font-size:14px; line-height:1.9; }
+.example-card .steps div{ margin-bottom:2px; }
+.example-card .ans{ margin-top:10px; padding:10px 12px; background:rgba(47,143,110,.08); border-radius:8px; font-size:14px; color:#1E5E48; }
+
+/* --- tool workbench --- */
+.tool-panel{
+  position:relative; background:var(--card); border-radius:var(--radius);
+  box-shadow:var(--shadow); padding:26px 24px 22px; margin-top:4px;
+}
+.tool-panel::before, .tool-panel::after,
+.tool-panel .cbl, .tool-panel .cbr{
+  content:""; position:absolute; width:16px; height:16px; pointer-events:none;
+}
+.tool-panel::before{ top:8px; left:8px; border-top:2px solid var(--emerald); border-left:2px solid var(--emerald); }
+.tool-panel::after{ top:8px; right:8px; border-top:2px solid var(--emerald); border-right:2px solid var(--emerald); }
+.tool-panel .cbl{ bottom:8px; left:8px; border-bottom:2px solid var(--emerald); border-left:2px solid var(--emerald); }
+.tool-panel .cbr{ bottom:8px; right:8px; border-bottom:2px solid var(--emerald); border-right:2px solid var(--emerald); }
+.tool-title{ display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+.tool-title .dotmark{ width:9px; height:9px; border-radius:50%; background:var(--emerald); }
+.tool-title h4{ margin:0; font-size:15px; font-family:'JetBrains Mono',monospace; letter-spacing:.02em; text-transform:uppercase; color:var(--ink-soft); }
+
+.controls{ display:flex; flex-wrap:wrap; gap:14px; margin-bottom:18px; align-items:flex-end; }
+.field{ display:flex; flex-direction:column; gap:5px; }
+.field label{ font-size:11.5px; font-family:'JetBrains Mono',monospace; color:var(--ink-soft); }
+.field input[type=number], .field input[type=text], .field select{
+  border:1.5px solid var(--grid); border-radius:8px; padding:8px 10px;
+  font-family:'JetBrains Mono',monospace; font-size:14px; width:104px; background:#fff; color:var(--ink);
+}
+.field input[type=range]{ width:160px; accent-color:var(--emerald); }
+.field .rangeval{ font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--emerald); font-weight:600;}
+.btn{
+  border:none; cursor:pointer; border-radius:9px; padding:9px 16px; font-size:13.5px; font-weight:600;
+  background:var(--ink); color:#fff; transition:transform .12s, background .2s;
+}
+.btn:hover{ background:var(--ink-soft); transform:translateY(-1px); }
+.btn.secondary{ background:transparent; color:var(--ink); border:1.5px solid var(--grid); }
+.btn.secondary:hover{ background:var(--paper); }
+.readout{ display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
+.readout .chip{
+  background:var(--paper); border-radius:9px; padding:8px 12px; font-size:13px;
+  font-family:'JetBrains Mono',monospace; color:var(--ink-soft);
+}
+.readout .chip b{ color:var(--ink); font-weight:700; }
+
+canvas{ width:100%; height:280px; display:block; border-radius:10px; background:#fff; border:1px solid var(--grid); }
+svg.diagram{ width:100%; max-width:420px; display:block; margin:0 auto; }
+
+.bars{ display:flex; align-items:flex-end; gap:8px; height:200px; padding:0 4px 4px; border-bottom:2px solid var(--ink); }
+.bar{ flex:1; background:linear-gradient(180deg, var(--gold), var(--gold-deep)); border-radius:6px 6px 2px 2px; position:relative; transition:height .5s cubic-bezier(.2,.8,.2,1); min-width:18px;}
+.bar .val{ position:absolute; top:-20px; left:50%; transform:translateX(-50%); font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-soft); white-space:nowrap;}
+.bar .idx{ position:absolute; bottom:-20px; left:50%; transform:translateX(-50%); font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--ink-soft);}
+
+/* --- quiz --- */
+.quiz-panel{ margin-top:8px; }
+.quiz-score{
+  display:inline-block; font-family:'JetBrains Mono',monospace; font-size:12.5px;
+  background:var(--ink); color:#fff; padding:6px 12px; border-radius:20px; margin-bottom:16px;
+}
+.quiz-q{ background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px 20px; margin-bottom:12px; }
+.quiz-question{ margin:0 0 12px; font-size:14.5px; line-height:1.6; display:flex; gap:10px; }
+.qnum{
+  flex:0 0 auto; width:24px; height:24px; border-radius:50%; background:var(--ink); color:#fff;
+  font-family:'JetBrains Mono',monospace; font-size:12px; display:flex; align-items:center; justify-content:center;
+}
+.quiz-options{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:8px; }
+.quiz-opt{
+  text-align:left; border:1.5px solid var(--grid); background:#fff; border-radius:9px; padding:9px 12px;
+  cursor:pointer; font-size:13.5px; transition:.15s;
+}
+.quiz-opt:hover:not(:disabled){ border-color:var(--ink-soft); }
+.quiz-opt.correct{ background:rgba(47,143,110,.12); border-color:var(--emerald); color:#1E5E48; font-weight:600;}
+.quiz-opt.wrong{ background:rgba(193,72,61,.1); border-color:var(--brick); color:#8C332A; }
+.quiz-opt:disabled{ cursor:default; }
+.quiz-explain{ margin:12px 0 0; font-size:13.5px; line-height:1.6; padding:10px 12px; background:var(--paper); border-radius:8px; }
+
+footer.site-foot{ text-align:center; padding:30px 20px 50px; color:var(--ink-soft); font-size:12.5px; }
+footer.site-foot a{ color:var(--gold-deep); text-decoration:underline; }
+
+/* ---- responsive ---- */
+@media (max-width:900px){
+  .spine{
+    position:fixed; z-index:40; left:0; top:0; height:100vh; transform:translateX(-100%);
+    transition:transform .25s ease; box-shadow:20px 0 40px rgba(0,0,0,.3);
+  }
+  .spine.open{ transform:translateX(0); }
+  .spine-toggle{
+    display:flex; align-items:center; gap:8px; position:fixed; top:16px; left:16px; z-index:41;
+    background:var(--ink); color:#fff; border:none; padding:10px 14px; border-radius:10px; cursor:pointer;
+    font-family:'JetBrains Mono',monospace; font-size:12.5px; box-shadow:var(--shadow);
+  }
+  main{ padding:80px 18px 60px; }
+  .hero{ padding:26px 20px; }
+  .hero-copy h1{ font-size:32px; }
+}
+</style>
+</head>
+<body>
+<button class="spine-toggle" id="spineToggle" aria-expanded="false">☰ Daftar Isi</button>
+
+<div class="app">
+  <nav class="spine" id="spine">
+    <div class="spine-brand">
+      <span class="eyebrow">BAB 1 · Siap OSN SMP</span>
+      <h1>Aljabar</h1>
+      <p>Modul interaktif — teori ringkas, alat peraga, dan latihan soal dengan koreksi otomatis.</p>
+    </div>
+    <div class="spine-progress">
+      <div class="label">Progres 7 sub-bab</div>
+      <div class="dots" id="dotRow">
+        <span class="dot" id="dot-1"></span><span class="dot" id="dot-2"></span><span class="dot" id="dot-3"></span>
+        <span class="dot" id="dot-4"></span><span class="dot" id="dot-5"></span><span class="dot" id="dot-6"></span>
+        <span class="dot" id="dot-7"></span>
+      </div>
+    </div>
+    <div class="spine-nav" id="spineNav">
+      <button class="spine-item" data-target="topic-1"><span class="num">1.1</span> Operasi Aljabar</button>
+      <button class="spine-item" data-target="topic-2"><span class="num">1.2</span> Fungsi</button>
+      <button class="spine-item" data-target="topic-3"><span class="num">1.3</span> Persamaan Linear</button>
+      <button class="spine-item" data-target="topic-4"><span class="num">1.4</span> SPLDV</button>
+      <button class="spine-item" data-target="topic-5"><span class="num">1.5</span> Pertidaksamaan Linear</button>
+      <button class="spine-item" data-target="topic-6"><span class="num">1.6</span> Barisan &amp; Deret</button>
+      <button class="spine-item" data-target="topic-7"><span class="num">1.7</span> Statistika</button>
+    </div>
+    <div class="spine-foot">Diadaptasi dari modul <em>Siap Olimpiade Matematika SMP/MTs 2015–2016</em>, Bab 1 Aljabar.</div>
+  </nav>
+
+  <main id="main">
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">Peta pola, bukan hafalan</span>
+        <h1>Aljabar, dari sifat dasar sampai level OSN.</h1>
+        <p>Tujuh sub-bab — tiap sub-bab punya ringkasan rumus, contoh terpandu, alat peraga yang bisa diutak-atik, dan latihan soal dengan pembahasan instan.</p>
+        <div class="hero-stat-row">
+          <div class="hero-stat"><b>7</b>Sub-bab</div>
+          <div class="hero-stat"><b>7</b>Alat interaktif</div>
+          <div class="hero-stat"><b>35</b>Soal latihan</div>
+        </div>
+      </div>
+      <div class="hero-demo">
+        <svg class="diagram" id="heroSquare" viewBox="0 0 220 220" style="max-width:200px;"></svg>
+        <span class="cap mono">(a+b)² = a² + 2ab + b²</span>
+      </div>
+    </section>
+
+    <!-- ============ TOPIC 1 : OPERASI ALJABAR ============ -->
+    <section class="topic active" id="topic-1">
+      <div class="topic-head">
+        <span class="tag">BAB 1.1</span>
+        <h2>Operasi Aljabar</h2>
+        <p class="lede">Bentuk aljabar, sifat-sifat operasi, pemangkatan istimewa, dan pemfaktoran — fondasi untuk semua sub-bab lainnya.</p>
+      </div>
+
+      <div class="block-label">Ringkasan Materi</div>
+      <div class="theory-grid">
+        <div class="theory-card">
+          <h3>Jenis Suku</h3>
+          <p><b>Suku tunggal</b> (monomial): \(3a\), \(-3ab^2\)<br>
+          <b>Suku dua</b> (binomial): \(-2x+3y\)<br>
+          <b>Suku tiga</b> (trinomial): \(mn-pq+7\)<br>
+          <b>Suku banyak</b> (polinomial): lebih dari 3 suku.</p>
+        </div>
+        <div class="theory-card">
+          <h3>Sifat Operasi</h3>
+          <ul>
+            <li>Komutatif: \(m+n=n+m\), \(m\cdot n=n\cdot m\)</li>
+            <li>Asosiatif: \((m+n)+p=m+(n+p)\)</li>
+            <li>Distributif: \(m\cdot(n+p)=mn+mp\)</li>
+            <li>Identitas: \(m+0=m\), \(m\cdot1=m\)</li>
+            <li>Invers: \(m+(-m)=0\)</li>
+          </ul>
+        </div>
+        <div class="theory-card">
+          <h3>Pemangkatan Istimewa</h3>
+          <div class="formula mono">
+            \((a+b)^2=a^2+2ab+b^2\)<br>
+            \((a-b)^2=a^2-2ab+b^2\)<br>
+            \((a+b)^3=a^3+3a^2b+3ab^2+b^3\)<br>
+            \((a-b)^3=a^3-3a^2b+3ab^2-b^3\)
+          </div>
+        </div>
+        <div class="theory-card">
+          <h3>Faktorisasi Khusus</h3>
+          <div class="formula mono">
+            \(x^2-y^2=(x+y)(x-y)\)<br>
+            \(x^3+y^3=(x+y)(x^2-xy+y^2)\)<br>
+            \(x^3-y^3=(x-y)(x^2+xy+y^2)\)
+          </div>
+        </div>
+        <div class="theory-card">
+          <h3>Pemfaktoran \(ax^2+bx+c\)</h3>
+          <p><b>Jika \(a=1\):</b> cari \(p,q\) dengan \(p+q=b\), \(p\cdot q=c\) → \((x+p)(x+q)\).</p>
+          <p><b>Jika \(a\neq1\):</b> cari \(P,Q\) dengan \(P+Q=b\), \(P\cdot Q=ac\) → \(\dfrac{(ax+P)(ax+Q)}{a}\), lalu sederhanakan.</p>
+        </div>
+      </div>
+
+      <div class="block-label">Contoh Terpandu</div>
+      <div class="example-card">
+        <span class="ex-tag">Contoh 1 · Faktorisasi selisih kuadrat</span>
+        <h4>Tentukan nilai dari \(\sqrt{5050^2-4950^2}\)</h4>
+        <div class="steps">
+          <div>\(\sqrt{5050^2-4950^2}=\sqrt{(5050+4950)(5050-4950)}\)</div>
+          <div>\(=\sqrt{10\,000\times100}=\sqrt{1\,000\,000}\)</div>
+        </div>
+        <div class="ans">Jadi, hasilnya adalah <b>1.000</b>.</div>
+      </div>
+      <div class="example-card">
+        <span class="ex-tag">Contoh 2 · Pemfaktoran \(a\neq1\)</span>
+        <h4>Faktorkan \(3x^2-4x-4\)</h4>
+        <div class="steps">
+          <div>Cari \(P,Q\) dengan \(P+Q=-4\) dan \(P\cdot Q=3\times(-4)=-12\), habis dibagi \(a=3\): \(P=-6,\ Q=2\)</div>
+          <div>\(3x^2-4x-4=\left(3x+\dfrac{-6}{1}\right)\left(x-\dfrac{6}{3}\right)\) setelah disederhanakan menjadi \((3x+2)(x-2)\)</div>
+        </div>
+        <div class="ans">Cek: \((3x+2)(x-2)=3x^2-6x+2x-4=3x^2-4x-4\) ✓ — Jadi <b>\((3x+2)(x-2)\)</b>.</div>
+      </div>
+
+      <div class="block-label">Alat Interaktif</div>
+      <div class="tool-panel"><div class="cbl"></div><div class="cbr"></div>
+        <div class="tool-title"><span class="dotmark"></span><h4>Bukti Geometris \((a+b)^2\)</h4></div>
+        <p style="font-size:13.5px;color:var(--ink-soft);margin:-6px 0 16px;">Geser nilai \(a\) dan \(b\) — persegi besar berukuran \((a+b)\times(a+b)\) akan otomatis terbagi menjadi empat area yang membuktikan rumusnya secara visual.</p>
+        <div class="controls">
+          <div class="field">
+            <label for="sq-a">a = <span class="rangeval" id="sq-a-val">3</span></label>
+            <input type="range" id="sq-a" min="1" max="8" value="3">
+          </div>
+          <div class="field">
+            <label for="sq-b">b = <span class="rangeval" id="sq-b-val">2</span></label>
+            <input type="range" id="sq-b" min="1" max="8" value="2">
+          </div>
+        </div>
+        <svg class="diagram" id="squareSvg" viewBox="0 0 320 320"></svg>
+        <div class="readout" id="squareReadout"></div>
+      </div>
+
+      <div class="block-label">Latihan Soal Interaktif</div>
+      <div class="quiz-panel" id="quiz-1"></div>
+    </section>
+
+    <!-- ============ TOPIC 2 : FUNGSI ============ -->
+    <section class="topic" id="topic-2">
+      <div class="topic-head">
+        <span class="tag">BAB 1.2</span>
+        <h2>Fungsi</h2>
+        <p class="lede">Pemetaan antar himpunan, cara menuliskan rumus fungsi, dan fungsi kuadrat (parabola) beserta titik-titik pentingnya.</p>
+      </div>
+
+      <div class="block-label">Ringkasan Materi</div>
+      <div class="theory-grid">
+        <div class="theory-card">
+          <h3>Pemetaan</h3>
+          <p>\(f:A\to B\) memasangkan tiap anggota <b>domain</b> \(A\) dengan tepat satu anggota <b>kodomain</b> \(B\). Himpunan hasil pasangannya disebut <b>range</b>.</p>
+          <div class="formula mono">
+            Banyak pemetaan \(f:A\to B = n(B)^{n(A)}\)<br>
+            Korespondensi satu-satu (\(n(A)=n(B)=n\)): \(n!\)
+          </div>
+        </div>
+        <div class="theory-card">
+          <h3>Fungsi Kuadrat</h3>
+          <p>Bentuk umum: \(f(x)=ax^2+bx+c,\ a\neq0\). Grafiknya parabola.</p>
+          <div class="formula mono">
+            Sumbu simetri: \(x_e=-\dfrac{b}{2a}\)<br>
+            Nilai ekstrim: \(y_e=-\dfrac{D}{4a}\)<br>
+            Diskriminan: \(D=b^2-4ac\)
+          </div>
+          <p>Terbuka ke atas jika \(a>0\), ke bawah jika \(a<0\).</p>
+        </div>
+      </div>
+
+      <div class="block-label">Contoh Terpandu</div>
+      <div class="example-card">
+        <span class="ex-tag">Contoh · Menentukan fungsi kuadrat dari titik puncak</span>
+        <h4>Kurva parabola bertitik balik \((1,-4)\) dan melalui \((2,-3)\)</h4>
+        <div class="steps">
+          <div>Gunakan bentuk puncak: \(f(x)=a(x-x_e)^2+y_e=a(x-1)^2-4\)</div>
+          <div>Substitusi \((2,-3)\): \(-3=a(2-1)^2-4 \Rightarrow -3=a-4 \Rightarrow a=1\)</div>
+        </div>
+        <div class="ans">Jadi \(f(x)=(x-1)^2-4=x^2-2x-3\).</div>
+      </div>
+
+      <div class="block-label">Alat Interaktif</div>
+      <div class="tool-panel"><div class="cbl"></div><div class="cbr"></div>
+        <div class="tool-title"><span class="dotmark"></span><h4>Penjelajah Fungsi Kuadrat</h4></div>
+        <p style="font-size:13.5px;color:var(--ink-soft);margin:-6px 0 16px;">Ubah \(a\), \(b\), \(c\) pada \(f(x)=ax^2+bx+c\) dan lihat bagaimana grafik, titik puncak, dan akar-akarnya berubah.</p>
+        <div class="controls">
+          <div class="field"><label for="fq-a">a</label><input type="number" id="fq-a" value="1" step="0.5"></div>
+          <div class="field"><label for="fq-b">b</label><input type="number" id="fq-b" value="-2" step="0.5"></div>
+          <div class="field"><label for="fq-c">c</label><input type="number" id="fq-c" value="-3" step="0.5"></div>
+          <button class="btn" id="fq-draw">Gambar Grafik</button>
+        </div>
+        <canvas id="fqCanvas" height="280"></canvas>
+        <div class="readout" id="fqReadout"></div>
+      </div>
+
+      <div class="block-label">Latihan Soal Interaktif</div>
+      <div class="quiz-panel" id="quiz-2"></div>
+    </section>
+
+    <!-- ============ TOPIC 3 : PERSAMAAN LINEAR ============ -->
+    <section class="topic" id="topic-3">
+      <div class="topic-head">
+        <span class="tag">BAB 1.3</span>
+        <h2>Persamaan Linear</h2>
+        <p class="lede">Persamaan linear satu &amp; dua variabel, serta sifat-sifat yang menjaga kesetaraan kedua ruas saat diselesaikan.</p>
+      </div>
+
+      <div class="block-label">Ringkasan Materi</div>
+      <div class="theory-grid">
+        <div class="theory-card">
+          <h3>Bentuk Umum</h3>
+          <p><b>PLSV:</b> \(ax+b=0,\ a\neq0\)</p>
+          <p><b>PLDV:</b> \(ax+by+c=0\), dengan \(a,b\) tidak keduanya nol.</p>
+        </div>
+        <div class="theory-card">
+          <h3>Sifat Kesetaraan</h3>
+          <ul>
+            <li>Menambah/mengurangi kedua ruas dengan bilangan yang sama tidak mengubah solusi.</li>
+            <li>Mengalikan/membagi kedua ruas dengan bilangan tak-nol yang sama tidak mengubah solusi.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="block-label">Contoh Terpandu</div>
+      <div class="example-card">
+        <span class="ex-tag">Contoh · Soal cerita</span>
+        <h4>Andi membelanjakan uangnya dalam tiga hari</h4>
+        <div class="steps">
+          <div>Misal uang mula-mula \(=x\). Minggu: \(\frac12x\); Senin: \(\frac12x-4000\); Selasa: \(\frac13(\frac12x-4000)\); sisa akhir Rp1.000.</div>
+          <div>\(x=\frac12x+\left(\frac12x-4000\right)+\frac13\left(\frac12x-4000\right)+1000\)</div>
+          <div>Dikali 6: \(6x=3x+3x-24000+x-8000+6000 \Rightarrow -x=-26000\)</div>
+        </div>
+        <div class="ans">Jadi uang Andi mula-mula adalah <b>Rp26.000</b>.</div>
+      </div>
+
+      <div class="block-label">Alat Interaktif</div>
+      <div class="tool-panel"><div class="cbl"></div><div class="cbr"></div>
+        <div class="tool-title"><span class="dotmark"></span><h4>Neraca Penyelesaian \(ax+b=c\)</h4></div>
+        <p style="font-size:13.5px;color:var(--ink-soft);margin:-6px 0 16px;">Masukkan \(a,b,c\), lalu tekan tiap langkah untuk melihat neraca "menyeimbang" sambil persamaan disederhanakan.</p>
+        <div class="controls">
+          <div class="field"><label for="pl-a">a</label><input type="number" id="pl-a" value="2"></div>
+          <div class="field"><label for="pl-b">b</label><input type="number" id="pl-b" value="5"></div>
+          <div class="field"><label for="pl-c">c</label><input type="number" id="pl-c" value="13"></div>
+          <button class="btn" id="pl-reset">Mulai / Ulangi</button>
+          <button class="btn secondary" id="pl-step">Langkah Berikutnya →</button>
+        </div>
+        <svg class="diagram" id="balanceSvg" viewBox="0 0 320 190" style="max-width:320px;"></svg>
+        <div class="readout" id="plReadout"></div>
+      </div>
+
+      <div class="block-label">Latihan Soal Interaktif</div>
+      <div class="quiz-panel" id="quiz-3"></div>
+    </section>
+
+    <!-- ============ TOPIC 4 : SPLDV ============ -->
+    <section class="topic" id="topic-4">
+      <div class="topic-head">
+        <span class="tag">BAB 1.4</span>
+        <h2>Sistem Persamaan Linear Dua Variabel</h2>
+        <p class="lede">Metode substitusi dan eliminasi, serta makna geometris solusi sebagai titik potong dua garis.</p>
+      </div>
+
+      <div class="block-label">Ringkasan Materi</div>
+      <div class="theory-grid">
+        <div class="theory-card">
+          <h3>Metode Substitusi</h3>
+          <p>Ubah salah satu persamaan ke bentuk eksplisit (\(y=mx+n\)), lalu substitusikan ke persamaan lain.</p>
+        </div>
+        <div class="theory-card">
+          <h3>Metode Eliminasi</h3>
+          <p>Samakan koefisien salah satu variabel, lalu jumlahkan/kurangkan kedua persamaan untuk menghilangkannya.</p>
+        </div>
+        <div class="theory-card">
+          <h3>Makna Geometris</h3>
+          <ul>
+            <li>Berpotongan di satu titik → solusi tunggal</li>
+            <li>Sejajar → tidak ada solusi</li>
+            <li>Berimpit → tak hingga solusi</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="block-label">Contoh Terpandu</div>
+      <div class="example-card">
+        <span class="ex-tag">Contoh · Metode eliminasi</span>
+        <h4>3 kaos + 4 topi = Rp960.000, 2 kaos + 5 topi = Rp990.000</h4>
+        <div class="steps">
+          <div>\(3x+4y=960000\ (\times2) \to 6x+8y=1920000\)</div>
+          <div>\(2x+5y=990000\ (\times3) \to 6x+15y=2970000\)</div>
+          <div>Kurangkan: \(7y=1050000 \Rightarrow y=150000\), lalu \(x=120000\)</div>
+        </div>
+        <div class="ans">Harga kaos <b>Rp120.000</b>, harga topi <b>Rp150.000</b>.</div>
+      </div>
+
+      <div class="block-label">Alat Interaktif</div>
+      <div class="tool-panel"><div class="cbl"></div><div class="cbr"></div>
+        <div class="tool-title"><span class="dotmark"></span><h4>Penjelajah Dua Garis</h4></div>
+        <p style="font-size:13.5px;color:var(--ink-soft);margin:-6px 0 16px;">Masukkan koefisien \(a_1x+b_1y=c_1\) dan \(a_2x+b_2y=c_2\) — titik potong (solusi SPLDV) akan ditandai otomatis.</p>
+        <div class="controls">
+          <div class="field"><label for="sp-a1">a₁</label><input type="number" id="sp-a1" value="1"></div>
+          <div class="field"><label for="sp-b1">b₁</label><input type="number" id="sp-b1" value="1"></div>
+          <div class="field"><label for="sp-c1">c₁</label><input type="number" id="sp-c1" value="6"></div>
+          <div class="field"><label for="sp-a2">a₂</label><input type="number" id="sp-a2" value="1"></div>
+          <div class="field"><label for="sp-b2">b₂</label><input type="number" id="sp-b2" value="-1"></div>
+          <div class="field"><label for="sp-c2">c₂</label><input type="number" id="sp-c2" value="2"></div>
+          <button class="btn" id="sp-draw">Gambar</button>
+        </div>
+        <canvas id="spCanvas" height="280"></canvas>
+        <div class="readout" id="spReadout"></div>
+      </div>
+
+      <div class="block-label">Latihan Soal Interaktif</div>
+      <div class="quiz-panel" id="quiz-4"></div>
+    </section>
+
+    <!-- ============ TOPIC 5 : PERTIDAKSAMAAN LINEAR ============ -->
+    <section class="topic" id="topic-5">
+      <div class="topic-head">
+        <span class="tag">BAB 1.5</span>
+        <h2>Pertidaksamaan Linear</h2>
+        <p class="lede">Sifat-sifat pertidaksamaan (termasuk aturan tanda berbalik), nilai mutlak, dan pertaksamaan AM–GM.</p>
+      </div>
+
+      <div class="block-label">Ringkasan Materi</div>
+      <div class="theory-grid">
+        <div class="theory-card">
+          <h3>Sifat Utama</h3>
+          <ul>
+            <li>Tambah/kurang bilangan sama di kedua ruas: tanda tidak berubah.</li>
+            <li>Kali/bagi bilangan <b>positif</b>: tanda tidak berubah.</li>
+            <li>Kali/bagi bilangan <b>negatif</b>: tanda <b>dibalik</b>.</li>
+          </ul>
+        </div>
+        <div class="theory-card">
+          <h3>Nilai Mutlak</h3>
+          <div class="formula mono">
+            \(|a|\le b \iff -b\le a\le b\)<br>
+            \(|a|\ge b \iff a\le-b\ \text{atau}\ a\ge b\)
+          </div>
+        </div>
+        <div class="theory-card">
+          <h3>Pertaksamaan AM–GM</h3>
+          <p>Untuk \(x_1,\dots,x_n\ge0\):</p>
+          <div class="formula mono">\(\dfrac{x_1+\cdots+x_n}{n}\ \ge\ \sqrt[n]{x_1\cdots x_n}\)</div>
+        </div>
+      </div>
+
+      <div class="block-label">Contoh Terpandu</div>
+      <div class="example-card">
+        <span class="ex-tag">Contoh · Pembuktian AM–GM</span>
+        <h4>Buktikan \((a+b)(b+c)(c+a)\ge8abc\) untuk \(a,b,c\ge0\)</h4>
+        <div class="steps">
+          <div>AM–GM: \(a+b\ge2\sqrt{ab}\), \(b+c\ge2\sqrt{bc}\), \(c+a\ge2\sqrt{ca}\)</div>
+          <div>Kalikan ketiganya: \((a+b)(b+c)(c+a)\ge8\sqrt{a^2b^2c^2}=8abc\)</div>
+        </div>
+        <div class="ans">Terbukti.</div>
+      </div>
+
+      <div class="block-label">Alat Interaktif</div>
+      <div class="tool-panel"><div class="cbl"></div><div class="cbr"></div>
+        <div class="tool-title"><span class="dotmark"></span><h4>Garis Bilangan Interaktif</h4></div>
+        <p style="font-size:13.5px;color:var(--ink-soft);margin:-6px 0 16px;">Selesaikan \(ax+b\ \Box\ c\) dan lihat daerah penyelesaiannya pada garis bilangan (perhatikan tanda dibalik jika \(a<0\)).</p>
+        <div class="controls">
+          <div class="field"><label for="pt-a">a</label><input type="number" id="pt-a" value="2"></div>
+          <div class="field"><label for="pt-b">b</label><input type="number" id="pt-b" value="-3"></div>
+          <div class="field"><label for="pt-op">tanda</label>
+            <select id="pt-op"><option value="lt">&lt;</option><option value="lte">&le;</option><option value="gt" selected>&gt;</option><option value="gte">&ge;</option></select>
+          </div>
+          <div class="field"><label for="pt-c">c</label><input type="number" id="pt-c" value="7"></div>
+          <button class="btn" id="pt-draw">Selesaikan</button>
+        </div>
+        <svg class="diagram" id="numlineSvg" viewBox="0 0 420 100" style="max-width:100%;"></svg>
+        <div class="readout" id="ptReadout"></div>
+      </div>
+
+      <div class="block-label">Latihan Soal Interaktif</div>
+      <div class="quiz-panel" id="quiz-5"></div>
+    </section>
+
+    <!-- ============ TOPIC 6 : BARISAN & DERET ============ -->
+    <section class="topic" id="topic-6">
+      <div class="topic-head">
+        <span class="tag">BAB 1.6</span>
+        <h2>Barisan &amp; Deret</h2>
+        <p class="lede">Barisan aritmetika &amp; geometri, serta rumus jumlah suku (deret), termasuk deret geometri tak hingga.</p>
+      </div>
+
+      <div class="block-label">Ringkasan Materi</div>
+      <div class="theory-grid">
+        <div class="theory-card">
+          <h3>Barisan Aritmetika</h3>
+          <p>Beda tetap \(b=U_2-U_1=\dots\)</p>
+          <div class="formula mono">\(U_n=U_1+(n-1)b\)</div>
+        </div>
+        <div class="theory-card">
+          <h3>Barisan Geometri</h3>
+          <p>Rasio tetap \(r=\dfrac{U_2}{U_1}=\dots\)</p>
+          <div class="formula mono">\(U_n=U_1\cdot r^{\,n-1}\)</div>
+        </div>
+        <div class="theory-card">
+          <h3>Deret Aritmetika</h3>
+          <div class="formula mono">\(S_n=\dfrac{n}{2}\big[2a+(n-1)b\big]\)</div>
+        </div>
+        <div class="theory-card">
+          <h3>Deret Geometri</h3>
+          <div class="formula mono">
+            \(S_n=\dfrac{a(r^n-1)}{r-1}\ (r>1)\)<br>
+            \(S_n=\dfrac{a(1-r^n)}{1-r}\ (r<1)\)<br>
+            Tak hingga (\(|r|<1\)): \(S_\infty=\dfrac{a}{1-r}\)
+          </div>
+        </div>
+      </div>
+
+      <div class="block-label">Contoh Terpandu</div>
+      <div class="example-card">
+        <span class="ex-tag">Contoh · Deret aritmetika</span>
+        <h4>Deret \(1+5+9+13+17+\dots\), tentukan \(S_{15}\) dan \(S_{2016}\)</h4>
+        <div class="steps">
+          <div>\(a=1,\ b=4\)</div>
+          <div>\(S_{15}=\frac{15}{2}\big[2(1)+14(4)\big]=\frac{15}{2}(58)=435\)</div>
+          <div>\(S_{2016}=\frac{2016}{2}\big[2(1)+2015(4)\big]=1008(8062)=8.126.496\)</div>
+        </div>
+        <div class="ans"><b>\(S_{15}=435\)</b> dan <b>\(S_{2016}=8.126.496\)</b>.</div>
+      </div>
+
+      <div class="block-label">Alat Interaktif</div>
+      <div class="tool-panel"><div class="cbl"></div><div class="cbr"></div>
+        <div class="tool-title"><span class="dotmark"></span><h4>Visualisasi Barisan &amp; Deret</h4></div>
+        <p style="font-size:13.5px;color:var(--ink-soft);margin:-6px 0 16px;">Pilih jenis barisan, atur suku pertama dan beda/rasio, lalu lihat suku-sukunya "tumbuh" sebagai batang dan jumlahnya dihitung otomatis.</p>
+        <div class="controls">
+          <div class="field"><label for="bd-type">Jenis</label>
+            <select id="bd-type"><option value="a">Aritmetika</option><option value="g">Geometri</option></select>
+          </div>
+          <div class="field"><label for="bd-a">Suku pertama (a)</label><input type="number" id="bd-a" value="2"></div>
+          <div class="field"><label for="bd-r" id="bd-r-label">Beda (b)</label><input type="number" id="bd-r" value="3"></div>
+          <div class="field"><label for="bd-n">Banyak suku (n) = <span class="rangeval" id="bd-n-val">8</span></label><input type="range" id="bd-n" min="3" max="10" value="8"></div>
+          <button class="btn" id="bd-draw">Tampilkan</button>
+        </div>
+        <div class="bars" id="bdBars" style="margin-top:26px;"></div>
+        <div class="readout" id="bdReadout"></div>
+      </div>
+
+      <div class="block-label">Latihan Soal Interaktif</div>
+      <div class="quiz-panel" id="quiz-6"></div>
+    </section>
+
+    <!-- ============ TOPIC 7 : STATISTIKA ============ -->
+    <section class="topic" id="topic-7">
+      <div class="topic-head">
+        <span class="tag">BAB 1.7</span>
+        <h2>Statistika</h2>
+        <p class="lede">Ukuran pemusatan (mean, median, modus) dan ukuran penyebaran (kuartil, jangkauan) untuk data tunggal.</p>
+      </div>
+
+      <div class="block-label">Ringkasan Materi</div>
+      <div class="theory-grid">
+        <div class="theory-card">
+          <h3>Ukuran Pemusatan</h3>
+          <div class="formula mono">\(\bar{x}=\dfrac{x_1+x_2+\cdots+x_n}{n}\)</div>
+          <p><b>Median:</b> data ganjil → data ke-\(\frac{n+1}{2}\); data genap → rata-rata dua data tengah.</p>
+          <p><b>Modus:</b> nilai yang paling sering muncul.</p>
+        </div>
+        <div class="theory-card">
+          <h3>Ukuran Penyebaran</h3>
+          <div class="formula mono">
+            \(Q_1\) di posisi \(\frac14(n+1)\)<br>
+            \(Q_3\) di posisi \(\frac34(n+1)\)<br>
+            Jangkauan \(J=D_{max}-D_{min}\)
+          </div>
+        </div>
+      </div>
+
+      <div class="block-label">Contoh Terpandu</div>
+      <div class="example-card">
+        <span class="ex-tag">Contoh · Rataan hitung</span>
+        <h4>Tinggi badan 8 siswa: 155, 150, 152, 152, 157, 161, 154, 156</h4>
+        <div class="steps">
+          <div>\(\bar{x}=\dfrac{155+150+152+152+157+161+154+156}{8}=\dfrac{1237}{8}\)</div>
+        </div>
+        <div class="ans">Jadi rata-rata tinggi mereka adalah <b>154,625 cm</b>.</div>
+      </div>
+
+      <div class="block-label">Alat Interaktif</div>
+      <div class="tool-panel"><div class="cbl"></div><div class="cbr"></div>
+        <div class="tool-title"><span class="dotmark"></span><h4>Kalkulator Statistik Data Tunggal</h4></div>
+        <p style="font-size:13.5px;color:var(--ink-soft);margin:-6px 0 16px;">Masukkan data dipisah koma — mean, median, modus, kuartil, dan jangkauan dihitung otomatis, lengkap dengan plot titik.</p>
+        <div class="controls" style="align-items:center;">
+          <div class="field" style="flex:1; min-width:220px;">
+            <label for="st-data">Data (pisahkan dengan koma)</label>
+            <input type="text" id="st-data" value="155,150,152,152,157,161,154,156" style="width:100%;">
+          </div>
+          <button class="btn" id="st-calc">Hitung</button>
+        </div>
+        <canvas id="stCanvas" height="200"></canvas>
+        <div class="readout" id="stReadout"></div>
+      </div>
+
+      <div class="block-label">Latihan Soal Interaktif</div>
+      <div class="quiz-panel" id="quiz-7"></div>
+    </section>
+
+    <footer class="site-foot">
+      Modul interaktif ini diadaptasi dari <em>Siap Olimpiade Matematika SMP/MTs 2015–2016 — Bab 1 Aljabar</em> untuk keperluan pembelajaran.
+    </footer>
+  </main>
+</div>
+
+<script src="app.js" defer></script>
+</body>
+</html>
